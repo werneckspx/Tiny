@@ -7,3 +7,5 @@
 </div>
 
 Colaboradores: Felipe Werneck de Oliveira Mendes, José Marconi de Almeida Júnior.
+
+Foi utilizada a versão Python 3.10.12 para o código do interpretador.
