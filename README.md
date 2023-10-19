@@ -16,3 +16,8 @@ Para realização dos testes, é necessário mudar o nome do arquivo na linha 71
     lexer = LexicalAnalysis("somatorio.tiny")
  ```
 
+Para compilar e executar o programa, é necessário ter a versão a correta do Python e no terminal utilizar o seguinte comando:
+
+ ```
+    python3 LexicalAnalysis.py
+ ```
