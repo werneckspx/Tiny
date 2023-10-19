@@ -10,7 +10,7 @@ Colaboradores: Felipe Werneck de Oliveira Mendes, José Marconi de Almeida Júni
 
 Foi utilizada a versão Python 3.10.12 para o código do interpretador.
 
-Para realização dos testes, é necessário mudar o nome do arquivo na linha 716, para qualquer um dos outros arquivos .tiny que se encotnra no repositório:
+Para realização dos testes, é necessário mudar o nome do arquivo na linha 716, para qualquer um dos outros arquivos .tiny que se encontram no repositório:
 
  ```
     lexer = LexicalAnalysis("somatorio.tiny")
