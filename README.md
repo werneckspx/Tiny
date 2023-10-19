@@ -16,8 +16,25 @@ Para realização dos testes, é necessário mudar o nome do arquivo na linha 71
     lexer = LexicalAnalysis("somatorio.tiny")
  ```
 
-Para compilar e executar o programa, é necessário ter a versão a correta do Python e no terminal utilizar o seguinte comando:
+Para compilar e executar o programa, é necessário ter a versão correta do Python e no terminal utilizar o seguinte comando:
 
  ```
     python3 LexicalAnalysis.py
+ ```
+
+# Exemplo de Saída
+
+O exemplo abaixo se refere ao arquivo "somatorio.tiny", assim que compilado, é pedido ao usuário que digite números para serem somados, quando for digitado o número 0, ele faz a soma total dos números digitados e retorna o valor final da soma:
+
+ ```
+@josemarconi ➜ /workspaces/Tiny (main) $ python3 Interpretador.py
+15
+10
+3
+2
+24
+0
+54
+@josemarconi ➜ /workspaces/Tiny (main) $ 
+
  ```
