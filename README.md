@@ -22,7 +22,7 @@ Para compilar e executar o programa, é necessário ter a versão correta do Pyt
     python3 LexicalAnalysis.py
  ```
 
-# Exemplo de Saída
+### Exemplo de Saída
 
 O exemplo abaixo se refere ao arquivo "somatorio.tiny", assim que compilado, é pedido ao usuário que digite números para serem somados, quando for digitado o número 0, ele faz a soma total dos números digitados e retorna o valor final da soma:
 
