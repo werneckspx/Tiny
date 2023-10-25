@@ -343,43 +343,8 @@ class WhileCommand(Command):
     def execute(self):
         while self.condition.expr():
             self.commands.execute()
-            
-class IntExpr:
-    def __init__(self, line):
-        self.line = line
 
-    def expr(self):
-        pass
-            
-class BinaryIntExpr:
-    class Op:
-        ADD = 0
-        SUB = 1
-        MUL = 2
-        DIV = 3
-        MOD = 4
-
-    def __init__(self, line, left, op, right):
-        self.line = line
-        self.left = left
-        self.op = op
-        self.right = right
-
-    def expr(self):
-        v1 = self.left.expr()
-        v2 = self.right.expr()
-
-        if self.op == BinaryIntExpr.Op.ADD:
-            return v1 + v2
-        elif self.op == BinaryIntExpr.Op.SUB:
-            return v1 - v2
-        elif self.op == BinaryIntExpr.Op.MUL:
-            return v1 * v2
-        elif self.op == BinaryIntExpr.Op.DIV:
-            return int(v1 / v2)
-        else:  # Assume que é MOD 
-            return v1 % v2
-
+#BOOL_EXPR
 class BoolExpr:
     def __init__(self, line):
         self.line = line
@@ -419,6 +384,55 @@ class SingleBoolExpr:
         else:  # Assume que é (Maior ou Igual)
             return v1 >= v2
 
+class NotBoolExpr(BoolExpr):
+    def __init__(self, line, expr):
+        super().__init__(line)
+        self.expr = expr
+
+    def expr(self):
+        return not self.expr.expr()
+
+class ConstBoolExpr(BoolExpr):
+    def __init__(self, line, value):
+        self.line = line
+        self.value = value
+
+#INT_EXPR
+class IntExpr:
+    def __init__(self, line):
+        self.line = line
+
+    def expr(self):
+        pass
+            
+class BinaryIntExpr:
+    class Op:
+        ADD = 0
+        SUB = 1
+        MUL = 2
+        DIV = 3
+        MOD = 4
+
+    def __init__(self, line, left, op, right):
+        self.line = line
+        self.left = left
+        self.op = op
+        self.right = right
+
+    def expr(self):
+        v1 = self.left.expr()
+        v2 = self.right.expr()
+
+        if self.op == BinaryIntExpr.Op.ADD:
+            return v1 + v2
+        elif self.op == BinaryIntExpr.Op.SUB:
+            return v1 - v2
+        elif self.op == BinaryIntExpr.Op.MUL:
+            return v1 * v2
+        elif self.op == BinaryIntExpr.Op.DIV:
+            return int(v1 / v2)
+        else:  # Assume que é MOD 
+            return v1 % v2
 
 class ConstIntExpr(IntExpr):
     def __init__(self, line, value):
@@ -451,16 +465,6 @@ class NegIntExpr(IntExpr):
     def expr(self):
         return -self.expr.expr()
 
-
-class NotBoolExpr(BoolExpr):
-    def __init__(self, line, expr):
-        super().__init__(line)
-        self.expr = expr
-
-    def expr(self):
-        return not self.expr.expr()
-
-
 class ReadIntExpr(IntExpr):
     def __init__(self, line):
         super().__init__(line)
@@ -468,11 +472,6 @@ class ReadIntExpr(IntExpr):
     def expr(self):
         value = int(input())
         return value
-
-class ConstBoolExpr(BoolExpr):
-    def __init__(self, line, value):
-        self.line = line
-        self.value = value
 
 #SYNTATIC
 class SyntaticAnalysis:
