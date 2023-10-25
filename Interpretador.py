@@ -261,7 +261,6 @@ class LexicalAnalysis:
 
     lexer.__del__()'''
 
-#SYNTATIC
 #INTERPRETER
 
 #MEMORY
@@ -475,6 +474,7 @@ class ConstBoolExpr(BoolExpr):
         self.line = line
         self.value = value
 
+#SYNTATIC
 class SyntaticAnalysis:
     def __init__(self, lex):
         self.m_lex = lex
