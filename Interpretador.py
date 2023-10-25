@@ -505,12 +505,13 @@ class SyntaticAnalysis:
             print(f"Lexema não esperado [{self.m_current.token}]")
 
         exit(1)
-
+    # <program>   ::= program <cmdlist>
     def procProgram(self):
         self.eat(TokenType.TT_PROGRAM)
         cmd = self.procCmdList()
         return cmd
 
+    # <cmdlist>   ::= <cmd> { <cmd> }
     def procCmdList(self):
         line = self.m_lex.m_line
         cmds = BlocksCommand(line)
@@ -524,6 +525,7 @@ class SyntaticAnalysis:
 
         return cmds
 
+    # <cmd>       ::= (<assign> | <output> | <if> | <while>) ;
     def procCmd(self):
         cmd = None
         if self.m_current.type == TokenType.TT_VAR:
@@ -540,6 +542,7 @@ class SyntaticAnalysis:
         self.eat(TokenType.TT_SEMICOLON)
         return cmd
 
+    # <assign>    ::= <var> = <intexpr>
     def procAssign(self):
         line = self.m_lex.m_line
 
@@ -550,6 +553,7 @@ class SyntaticAnalysis:
         cmd = AssignCommand(line, var, expr)
         return cmd
 
+    # <output>    ::= output <intexpr>
     def procOutput(self):
         self.eat(TokenType.TT_OUTPUT)
         line = self.m_lex.m_line
@@ -569,6 +573,7 @@ class SyntaticAnalysis:
 
         return cmd
 
+    # <if>        ::= if <boolexpr> then <cmdlist> [ else <cmdlist> ] done
     def procIf(self):
         self.eat(TokenType.TT_IF)
         line = self.m_lex.m_line
@@ -585,6 +590,7 @@ class SyntaticAnalysis:
         cmd = IfCommand(line, cond, thenCmds, elseCmds)
         return cmd
 
+    # <while>     ::= while <boolexpr> do <cmdlist> done
     def procWhile(self):
         self.eat(TokenType.TT_WHILE)
         line = self.m_lex.m_line
@@ -597,6 +603,10 @@ class SyntaticAnalysis:
         cmd = WhileCommand(line, expr, cmds)
         return cmd
 
+
+    # <boolexpr>  ::= false | true |
+    #                 not <boolexpr> |
+    #                 <intterm> (== | != | < | > | <= | >=) <intterm>
     def procBoolExpr(self):
         if self.m_current.type == TokenType.TT_FALSE:
             self.advance()
@@ -640,6 +650,7 @@ class SyntaticAnalysis:
             expr = SingleBoolExpr(line, left, op, right)
             return expr
 
+    # <intexpr>   ::= [ + | - ] <intterm> [ (+ | - | * | / | %) <intterm> ]
     def procIntExpr(self):
         is_negative = False
         if self.m_current.type == TokenType.TT_ADD:
@@ -681,6 +692,7 @@ class SyntaticAnalysis:
 
         return left
 
+    # <intterm>   ::= <var> | <const> | read
     def procIntTerm(self):
         if self.m_current.type == TokenType.TT_VAR:
             return self.procVar()
@@ -692,6 +704,7 @@ class SyntaticAnalysis:
             expr = ReadIntExpr(line)
             return expr
 
+    # <var>       ::= id
     def procVar(self):
         tmp = self.m_current.token
 
@@ -701,6 +714,7 @@ class SyntaticAnalysis:
         var = Variable(line, tmp)
         return var
 
+    # <const>     ::= number
     def procConst(self):
         tmp = self.m_current.token
 
