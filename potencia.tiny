@@ -1,0 +1,9 @@
+program
+x = read;
+i = read;
+pot = 1;
+while i != 0 do
+    pot = pot * x;
+    i = i - 1;
+done;
+output pot;
