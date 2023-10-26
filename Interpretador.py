@@ -19,12 +19,12 @@ class TokenType:
     TT_GREATER_EQUAL = 8  # >=
 
     # Arithmetic operators
-    TT_ADD = 9  # +
+    TT_ADD = 9   # +
     TT_SUB = 10  # -
     TT_MUL = 11  # *
     TT_DIV = 12  # /
     TT_MOD = 13  # %
-
+    TT_POT = 28  # ^
     # Keywords
     TT_PROGRAM = 14  # program
     TT_WHILE = 15  # while
@@ -69,6 +69,7 @@ def tt2str(token_type):
         TokenType.TT_MUL: "MUL",
         TokenType.TT_DIV: "DIV",
         TokenType.TT_MOD: "MOD",
+        TokenType.TT_POT: "POT",
 
         # Keywords
         TokenType.TT_PROGRAM: "PROGRAM",
@@ -123,6 +124,7 @@ class SymbolTable:
             "*": TokenType.TT_MUL,
             "/": TokenType.TT_DIV,
             "%": TokenType.TT_MOD,
+            "^": TokenType.TT_POT,
             # Keywords
             "program": TokenType.TT_PROGRAM,
             "while": TokenType.TT_WHILE,
@@ -178,7 +180,7 @@ class LexicalAnalysis:
                 elif c == '!':
                     lex.token += c
                     state = 4
-                elif c in [';', '+', '-', '*', '/', '%']:
+                elif c in [';', '+', '-', '*', '/', '%', '^']:
                     lex.token += c
                     state = 7
                 elif c == '_' or c.isalpha():
@@ -412,6 +414,7 @@ class BinaryIntExpr:
         MUL = 2
         DIV = 3
         MOD = 4
+        POT = 5
 
     def __init__(self, line, left, op, right):
         self.line = line
@@ -431,8 +434,10 @@ class BinaryIntExpr:
             return v1 * v2
         elif self.op == BinaryIntExpr.Op.DIV:
             return int(v1 / v2)
-        else:  # Assume que é MOD 
+        elif self.op == BinaryIntExpr.Op.MOD:  
             return v1 % v2
+        else:
+            return int(v1 ** v2)
 
 class ConstIntExpr(IntExpr):
     def __init__(self, line, value):
@@ -665,7 +670,7 @@ class SyntaticAnalysis:
         else:
             left = self.procIntTerm()
 
-        if self.m_current.type in [TokenType.TT_ADD, TokenType.TT_SUB, TokenType.TT_MUL, TokenType.TT_DIV, TokenType.TT_MOD]:
+        if self.m_current.type in [TokenType.TT_ADD, TokenType.TT_SUB, TokenType.TT_MUL, TokenType.TT_DIV, TokenType.TT_MOD, TokenType.TT_POT]:
             line = self.m_lex.m_line
 
             op = BinaryIntExpr.Op.ADD
@@ -683,6 +688,9 @@ class SyntaticAnalysis:
                 self.advance()
             elif self.m_current.type == TokenType.TT_MOD:
                 op = BinaryIntExpr.Op.MOD
+                self.advance()
+            elif self.m_current.type == TokenType.TT_POT:
+                op = BinaryIntExpr.Op.POT
                 self.advance()
 
             right = self.procIntTerm()
